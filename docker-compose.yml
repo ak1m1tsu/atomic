@@ -1,0 +1,53 @@
+version: '3.4'
+
+services:
+  api:
+    image: atomic
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      CONFIG_PATH: /config.yaml
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: "atomic"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgrespw"
+    depends_on:
+      - postgres
+    networks:
+      - atomic
+    ports:
+      - "80:8083"
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: "atomic"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgrespw"
+    ports:
+      - "5432:5432"
+    volumes:
+      - atomic-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d atomic" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+    networks:
+      - atomic
+
+volumes:
+  atomic-data:
+
+
+networks:
+  atomic:
+    driver: bridge
