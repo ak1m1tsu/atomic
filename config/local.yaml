@@ -4,6 +4,8 @@ http_server:
   read_timeout: 4s
   write_timeout: 6s
   idle_timeout: 60s
+  username: admin
+  password: admin
 postgresql:
   user: postgres
   password: postgrespw

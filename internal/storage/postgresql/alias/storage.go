@@ -2,6 +2,7 @@ package alias
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/lib/pq"
@@ -28,7 +29,7 @@ func New(db *sql.DB) (*Storage, error) {
 
 func (s *Storage) SaveAlias(alias *data.Alias) error {
 	const (
-		op    = "storage.postgresql.alias.SaveURL"
+		op    = "storage.postgresql.alias.SaveAlias"
 		query = "INSERT INTO alias (url, name) VALUES ($1, $2) RETURNING id"
 	)
 
@@ -51,7 +52,7 @@ func (s *Storage) SaveAlias(alias *data.Alias) error {
 
 func (s *Storage) DeleteAlias(name string) error {
 	const (
-		op    = "storage.postgresql.alias.DeleteURL"
+		op    = "storage.postgresql.alias.DeleteAlias"
 		query = "DELETE FROM alias WHERE name = $1"
 	)
 
@@ -61,7 +62,7 @@ func (s *Storage) DeleteAlias(name string) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(name)
+	res, err := stmt.Exec(name)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return fmt.Errorf("%s: %w", op, storage.ErrAliasNotFound)
@@ -69,5 +70,39 @@ func (s *Storage) DeleteAlias(name string) error {
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
+	count, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	if count != 1 {
+		return fmt.Errorf("%s: %w", op, storage.ErrAliasNotFound)
+	}
+
 	return nil
+}
+
+func (s *Storage) GetAlias(name string) (string, error) {
+	const (
+		op    = "storage.postgresql.alias.GetAlias"
+		query = "SELECT url FROM alias WHERE name = $1"
+	)
+
+	stmt, err := s.db.Prepare(query)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	var url string
+
+	err = stmt.QueryRow(name).Scan(&url)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", fmt.Errorf("%s: %w", op, storage.ErrAliasNotFound)
+		}
+
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return url, nil
 }

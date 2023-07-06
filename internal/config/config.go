@@ -19,6 +19,8 @@ type HttpServer struct {
 	ReadTimeout  time.Duration `yaml:"read_timeout" env-default:"4s"`
 	WriteTimeout time.Duration `yaml:"write_timeout" env-default:"4s"`
 	IdleTimeout  time.Duration `yaml:"idle_timeout" env-default:"60s"`
+	Username     string        `yaml:"username" env-required:"true"`
+	Password     string        `yaml:"password" env-required:"true" env:"HTTP_SERVER_PASSWORD"`
 }
 
 type PostgreSQL struct {
