@@ -1,0 +1,6 @@
+env: prod
+http_server:
+  addr: 0.0.0.0:8083
+  read_timeout: 4s
+  write_timeout: 6s
+  idle_timeout: 60s
