@@ -10,22 +10,22 @@ services:
       CONFIG_PATH: /config.yaml
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB: "atomic"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgrespw"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_DB: atomic
       HTTP_SERVER_PASSWORD: ${HTTP_SERVER_PASSWORD}
     depends_on:
       - postgres
     networks:
       - atomic
     ports:
-      - "80:8083"
+      - "80:3000"
   postgres:
     image: postgres:alpine
     environment:
-      POSTGRES_DB: "atomic"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgrespw"
+      POSTGRES_DB: atomic
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespw
     ports:
       - "5432:5432"
     volumes:

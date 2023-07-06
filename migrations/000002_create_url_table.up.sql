@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS alias (
+CREATE TABLE IF NOT EXISTS aliases (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name varchar(50) NOT NULL,
     url text NOT NULL,

@@ -28,7 +28,7 @@ type PostgreSQL struct {
 	Password string `yaml:"password" env:"POSTGRES_PASSWORD"`
 	Host     string `yaml:"host" env:"POSTGRES_HOST"`
 	Port     string `yaml:"port" env:"POSTGRES_PORT"`
-	Database string `yaml:"database" env:"POSTGRES_DATABASE"`
+	Database string `yaml:"database" env:"POSTGRES_DB"`
 }
 
 func MustLoad() *Config {

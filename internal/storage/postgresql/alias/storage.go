@@ -30,7 +30,7 @@ func New(db *sql.DB) (*Storage, error) {
 func (s *Storage) SaveAlias(alias *data.Alias) error {
 	const (
 		op    = "storage.postgresql.alias.SaveAlias"
-		query = "INSERT INTO alias (url, name) VALUES ($1, $2) RETURNING id"
+		query = `INSERT INTO aliases (url, name) VALUES ($1, $2) RETURNING id`
 	)
 
 	stmt, err := s.db.Prepare(query)
@@ -53,7 +53,7 @@ func (s *Storage) SaveAlias(alias *data.Alias) error {
 func (s *Storage) DeleteAlias(name string) error {
 	const (
 		op    = "storage.postgresql.alias.DeleteAlias"
-		query = "DELETE FROM alias WHERE name = $1"
+		query = `DELETE FROM aliases WHERE name = $1`
 	)
 
 	stmt, err := s.db.Prepare(query)
@@ -85,7 +85,7 @@ func (s *Storage) DeleteAlias(name string) error {
 func (s *Storage) GetAlias(name string) (string, error) {
 	const (
 		op    = "storage.postgresql.alias.GetAlias"
-		query = "SELECT url FROM alias WHERE name = $1"
+		query = `SELECT a.url FROM aliases a WHERE name = $1`
 	)
 
 	stmt, err := s.db.Prepare(query)
