@@ -29,7 +29,7 @@ func New(db *sql.DB) (*Storage, error) {
 func (s *Storage) SaveAlias(alias *data.Alias) error {
 	const (
 		op    = "storage.postgresql.alias.SaveURL"
-		query = "INSERT INTO alias (name, url) VALUES ($1, $2) RETURNING id"
+		query = "INSERT INTO alias (url, name) VALUES ($1, $2) RETURNING id"
 	)
 
 	stmt, err := s.db.Prepare(query)
