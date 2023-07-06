@@ -1,4 +1,4 @@
-module github.com/romankravchuk/ushrt
+module github.com/romankravchuk/atomic
 
 go 1.20
 
