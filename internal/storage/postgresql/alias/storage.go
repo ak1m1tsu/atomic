@@ -26,7 +26,7 @@ func New(db *sql.DB) (*Storage, error) {
 	}, nil
 }
 
-func (s *Storage) SaveAlias(url *data.Alias) error {
+func (s *Storage) SaveAlias(alias *data.Alias) error {
 	const (
 		op    = "storage.postgresql.alias.SaveURL"
 		query = "INSERT INTO url (url, alias) VALUES ($1, $2) RETURNING id"
@@ -38,7 +38,7 @@ func (s *Storage) SaveAlias(url *data.Alias) error {
 	}
 	defer stmt.Close()
 
-	err = stmt.QueryRow(url.URL, url.Name).Scan(&url.ID)
+	err = stmt.QueryRow(alias.URL, alias.Name).Scan(&alias.ID)
 	if err != nil {
 		if psqlErr, ok := err.(*pq.Error); ok && psqlErr.Code == postgresql.UniqueViolation {
 			return fmt.Errorf("%s: %w", op, storage.ErrAliasExists)
