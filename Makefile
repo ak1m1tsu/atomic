@@ -1,11 +1,11 @@
-BINARY_FILE=./bin/ushrt
+BINARY_FILE=./bin/atomic
 
 lint:
 	golangci-lint run ./...
 
 .PHONY: build
 build: lint
-	go build -o ${BINARY_FILE} ./cmd/ushrt
+	go build -o ${BINARY_FILE} ./cmd/atomic
 
 run: build
 	${BINARY_FILE}
@@ -21,3 +21,9 @@ race:
 
 mock:
 	go generate ./...
+
+up:
+	docker compose up -d
+
+down:
+	docker compose down

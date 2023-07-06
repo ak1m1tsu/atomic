@@ -13,6 +13,7 @@ services:
       POSTGRES_DB: "atomic"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgrespw"
+      HTTP_SERVER_PASSWORD: ${HTTP_SERVER_PASSWORD}
     depends_on:
       - postgres
     networks:
